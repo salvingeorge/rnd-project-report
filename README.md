@@ -1,4 +1,5 @@
 # R&D Project Report Latex Template
+![event parameter](../../actions/workflows/main.yml/badge.svg?event=push)
 
 This is a template for R&D project reports in the Autonomous Systems master's program at Hochschule Bonn-Rhein-Sieg, using the `IEEETran` class.
 
