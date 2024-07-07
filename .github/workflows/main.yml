@@ -9,8 +9,7 @@ jobs:
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v3
         with:
-          root_file: "*.tex"
-          glob_root_file: true
+          root_file: "report.tex"
           working_directory: ./
       - name: Upload PDF file
         uses: actions/upload-artifact@v4
