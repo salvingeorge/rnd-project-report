@@ -5,8 +5,93 @@
     \section{Methodology}
     \label{sec:methodology}
 
-    Describe all conceptual details about your approach in this section.
-    Add any necessary subsections to improve the presentation.
+    % Describe all conceptual details about your approach in this section.
+    % Add any necessary subsections to improve the presentation.
 
-    Feel free to rename this section to better reflect the concrete topic you are discussing.
+    % Feel free to rename this section to better reflect the concrete topic you are discussing.
+    \subsection{Simulation Framework}
+    A set of simulation frameworks were investigated to select the best simulation that is available for the project. Gazebo was selected as the simulation based on its compatibility with ROS2 and the
+    availability of the plugins that are already made available due to the familiarity of the platform. The SJTU drone system was selected as the drone model for the simuluation as it was light weight and 
+    also easy to work with. A new radiation sensor plugin and radiation source plugin was developed to simulated the radiation source and the sensor. This is plugin can be easily integrated 
+    into the simulation and can be used to simulate the radiation source and the sensor. 
+
+    To represent the realistic radiation behaviour, the radiation source is modelled to be a point source that emits radiation in all directions. The radiation sensor recieved and publishes the radiation 
+    data in photon count rate and this photon count rate is then subjected to attenuation due the trees and air. The attenuation due to trees is implemented using ray tracing, which helps to see of the radiation source and the sensor
+    are in line of sight. If the trees are in the line of sight, the radiation is attenuated based on the tree type and specific attenuation factor. The tree positions are generated dynamically based on the map size but also while 
+    making sure the specific distance has been kept between the trees.
+    
+
+    \subsection{Evaluation Framework}
+
+    A new interface for handling the simulation and experiment metrics was developed. The interface is designed with PyQt5, a Python library for creating graphical user interfaces. 
+    Two interfaces have been developed that allow one to either handle all the parameters in the workspace or visualize any number of algorithms running within the workspace.
+    
+    \subsubsection{Parameter Editor}
+    The parameter editor application can be used for multiple purposes that can also be handled outside the current project. This application was developed to create a unified interface that
+    captures all the configuration files in yaml format. To make it compatible with ROS2 packages, the interface is designed to be able to load the ROS2 package names of interest from 
+    the yaml file. This yaml file is then processed to understand which packages are to be searched for from the root of the ROS2 workspace. The found yaml files are then sorted according to the package/ workspace it was found in
+    and the user can then select the package of interest. This will then load the yaml files and the loaded yaml files will be displayed in a tabular format. Through this interface,
+    it is possible to remove, add, and save the changes made to the yaml files. 
+   
+    Another application of this interface is to find all the common parameters that are used and shared between the different algorithms. Such common parameters include parameters such as search area, source location, ros2 topic names, etc. 
+    The changes made through this section of the app are then made to all the same parameters across the project workspace. This enables the user to transition or migrate the project to 
+    a different simulation framework or configuration where the parameters are different.
+
+    \subsubsection{Evaluation Visualizer}
+
+    Each algorithm, upon successful completion, is saved in a JSON file format with a standardized structure. All the metrics saved in this saved file are common for all the algorithms. 
+    This was done to make the algorithms more comparable and thereby make it easier to visualize the results. 
+   
+    The evaluation Visualizer is an interface that is developed to visualize these results based on a set of configurations. Once the interface is opened, the user can select the input directory which contains the 
+    saved JSON files, after which the user can select a directory to save the evaluated files. Upon selecting the input directory, it will load all the JSON files in the directory, classified into the names of the algorithm. From this interface, 
+    the user can determine the number of experiments to be evaluated from the total number of runs. After running the analysis, the algorithm runs are evaluated and displayed in the next tab. Also saved locally for later visualizations. 
+    The algorithms are evaluated together based on the predefined performance metrics, and some plots that represent some other metrics from the run. It also generates a report that basically tabulates the results evaluation based on the specific algorithm. 
+   
+    This interface also comes with an extra tab that gives the option to generate different types of plots based on the metrics that can be selected for both the x and y-axis. Different sets of color schema also can be 
+    selected from the drop-down menus and that plot will be generated and displayed in the same window. 
+
+    \subsection{Algorithms}
+    \subsubsection{Information-Gain-based Algorithm}
+    \subsubsection{Rollout-based Algorithm}
+
+    The rollout-algorithm in dynamic optimization problems, represent a form of approximate dynamic programming that uses a base heuristic through lookahead and policy iteration \cite{bertsekas2013rollout}. 
+    A rollout algorithm simulates multiple trajectories that represent possible future states from the current state, and uses the base heuristic to evaluate these trajectories and chooses the 
+    action that maximizes the objective. This algorithm was implemented for the localization of radioactive sources, by guiding the UAV to utilize a rollout-based path planning strategy to select 
+    the next best position to move. This is algorithm borrows concepts and observations from previous works by Hoffmann et al. \cite{rolloutHoffmann2019} and Tian et al. \cite{rolloutMultiStepLookaheadTian2008}
+
+    While Hoffmann et al. focused on bearing only RF emittor localization, the approach for radiation source localization needed some adaptations as it had to account for the challenges in localizing 
+    radiation sources. Where the original work focussed on optimizing bearing measurements and movement costs, our approach approach needed to account for radiation characteristics such as
+    inverse square law decay, intensity estimation, and radiation attenuations. The intensity estimation is relevant here as the algorithm does not have prior knowledge of the source intensity. 
+    Hoffmann et al. uses a Q-value $ Q(s,a) $ which is basically the expected cumulative reward of taking action a in state s and following an optimal policy thereafter. In their work, 
+    the Q-valiue is estimated by considering the cost immediate cost combining movement and measurement time, and the expected future cost again considering the movement and measurement time.
+    
+    For the localization of radioactive sources, the Q-value was modified to include the continous measurement taking and 
+    
+    \subsubsection{Inverse Square Law Optimization}
+    The implemented localization method is based on the inverse square law for radiation intensity and serves as a deterministic baseline for comparing different 
+    radiation source search strategies. The algorithm employs a systematic spiral search pattern consisting of three concentric circles positioned at 25\%, 50\%, 
+    and 75\% of the search area radius. This pattern begins from the center and expands outward, with the number of measurement points per circle scaling 
+    proportionally with the map size to maintain consistent coverage across different search areas.
+    \vspace{0.3cm}
+
+    The localization process relies on collecting radiation measurements at predefined points along this spiral trajectory. The source position estimation utilizes a weighted optimization 
+    approach incorporating the inverse square law, with higher weights assigned to stronger radiation readings to improve accuracy. To handle uncertainty in source intensity, the algorithm 
+    employs multiple optimization attempts with varying initial intensity estimates (100x, 1000x, and 10000x the maximum measured count rate) to avoid local minima. The uncertainty is further
+     quantified through a confidence circle around the estimated source position, with its radius proportional to the standard deviation of measurements. The Nelder-Mead optimization method, 
+     constrained to the defined search area, processes these measurements to determine the most likely source position and intensity within bounded parameters. 
+    \vspace{0.3cm}
+    
+    The Nelder-Mead optimization method, constrained to the defined search area, processes these measurements to determine the most likely source position.
+    The implementation includes real-time visualization capabilities, displaying the drone's position, measurement points color-coded by radiation intensity, 
+    true and estimated source locations, and a temporal measurement history. The system integrates with ROS2 for parameter configuration and uses the 
+    RadiationEvaluator class for performance assessment. Movement control incorporates proximity checks to ensure accurate measurements at each point, while 
+    robust error handling and cleanup procedures maintain system reliability.
+    \vspace{0.3cm}
+
+    This approach serves as an effective baseline for comparison due to its deterministic nature, foundation in established physics principles, reproducible 
+    behavior, and comprehensive evaluation metrics. The predefined path strategy, coupled with the inverse square law optimization, provides a methodical reference
+     point against which more sophisticated, informed search strategies can be evaluated.
+
+
+
 \end{document}
