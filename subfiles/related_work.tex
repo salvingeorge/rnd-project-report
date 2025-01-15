@@ -6,37 +6,37 @@
     \label{sec:related_work}
 
     % Summarise the relevant related work in this section and position your work with respect to the related work.
-    The subject of radioactive source localization is not explored as extensively as other localization problems. The main characteristic of the radioactive source search is about 
-    controlling the observer(s) position. The related works in the context of radioactive source localization have proposed different methods to solve the problem. Traditional methods relied heavily on using high number of sensors in the search and then localizing the estimated source position using least squares method \cite{huang2001real} \cite{howse2001least}. 
+    The subject of radioactive source localization has not been explored as extensively as other localization problems. The main characteristic of the radioactive source search is about 
+    controlling the observer(s) position. The related works in the context of radioactive source localization have proposed different methods to solve the problem. Traditional methods relied heavily on using a high number of sensors in the search and then localizing the estimated source position using the least squares method \cite{huang2001real} \cite{howse2001least}. 
     In the conventional methods, the observer moves through the search area following a predefined path \cite{ristic2010information}. Such a method was proposed by using uniform search \cite{ziock2002lost}.
-    Some of these autonomous methods uses triangulation-based techniques to localize the source \cite{fragkos2020} \cite{liu2010simulation}. These conventional methods, while functional, 
+    Some of these autonomous methods use triangulation-based techniques to localize the source \cite{fragkos2020} \cite{liu2010simulation}. These conventional methods, while functional, 
     face several critical limitations in efficiently localizing radioactive sources. Static sensor networks and predefined search path approaches require extensive coverage of the search area, making them 
-    more time consuming and computationally expensive.As noted in recent studies, traversal-based methods, though accurate, suffer from extremely low search efficiency \cite{hu2024autonomous}. These methods
-    become highly unreliable with larger search areas as it lacks intelligence to adapt to the environment. 
-    
-    Bayesian estimation method is a commonly used method in the context of radioactive source localization. These methods are widely adopted due to their abiility to handle uncertainties and incorporate
-    prior information in the localization process \cite{hu2024autonomous}. According to bayesian criterion, the localization of an unknown radioactive source can be determined by solving the posterior probability distribution
-    of the source parameter vector, which can be represented through various methods including the particle filter \cite{Ristic2007AnIG} \cite{ristic2010information} \cite{ling2022multi} and other probabilistic methods. The particle filter based method, 
+    more time-consuming and computationally expensive. As noted in recent studies, traversal-based methods, though accurate, suffer from extremely low search efficiency \cite{hu2024autonomous}. These methods
+    become highly unreliable with larger search areas as they lack the intelligence to adapt to the environment. 
+        
+    Bayesian estimation method is a commonly used method in the context of radioactive source localization. These methods are widely adopted due to their ability to handle uncertainties and incorporate
+    prior information in the localization process \cite{hu2024autonomous}. According to the Bayesian criterion, the localization of an unknown radioactive source can be determined by solving the posterior probability distribution
+    of the source parameter vector, which can be represented through various methods, including the particle filter \cite{Ristic2007AnIG} \cite{ristic2010information} \cite{ling2022multi} and other probabilistic methods. The particle filter-based method, 
     Ling et al. \cite{ling2022multi} highlight that the particle filter stands out as a practical approach that approximates the posterior distribution by maintaining and iteratively updating a set of weighted
     particles. At each step, the particles' weights are updated based on how likely the observed measurements are under each particle's hypothesis, and low-likelihood particles are replaced by higher-likelihood ones. 
     As shown by Ristic et al. \cite{Ristic2007AnIG}, this resampling process helps to maintain particle diversity while converging towards the most likely source parameters. They extended the 
-    particle filter approach further by introducing the information-driven strategy. Their method combines sequential bayesian estimation with Fisher information-based observer control to optimize measurement
-    collection. Intially, when source detection confidence is low, the observer moves through the search area in following a exploration pattern. After the detection threshold is reached with sufficient
-    probability, the observers motion and exposure time is controlled to maximize the information gain of future measurements. This method helps to guide the observer to positions that are expected
-    to provide the most information about the source parameters. However, a key limitation fisher information emerged in study of Ristic et al. \cite{ristic2010information} is that it 
+    particle filter approach further by introducing the information-driven strategy. Their method combines sequential Bayesian estimation with Fisher information-based observer control to optimize measurement
+    collection. Initially, when source detection confidence is low, the observer moves through the search area following an exploration pattern. After the detection threshold is reached with sufficient
+    probability, the observer's motion and exposure time are controlled to maximize the information gain of future measurements. This method helps to guide the observer to positions that are expected
+    to provide the most information about the source parameters. However, a key limitation of fisher information that emerged in the study of Ristic et al. \cite{ristic2010information} is that it 
     cannot be used before the source detection. To overcome this limitation, Ristic et al. proposed a method that uses Rényi divergence between current and predicted future posterior densities as 
-    the information gain metric. This Rényi divergence enables observer control even before the source detection, by considering the complete probability density function rather than just parameter estimates.
+    the information gain metric. This Rényi divergence enables observer control even before the source detection by considering the complete probability density function rather than just parameter estimates.
     This allows for more optimal data collection and observer control, leading to faster and more accurate source localization even before the source is detected. 
 
     Rollout algorithms, introduced by Bertsekas, represent a sequential optimization approach where variables are optimized one after another. Starting with a base policy or heuristic, rollout
-    algorithms construct an improved policy through one-step lookahead, often yielding significantly better performance than the original heuristic while maintaining implementation 
-    simplicity \cite{bertsekas2013rollout}. Several researchers have explored rollout algorithms for source localization and path planning. Hoffmann et al. proposeda
-    a rollout-based path planner that optimizes mobile sensor trajectories for RF source localization using look-ahead policies and cost-based optimization. While thier focus was on RF sources, 
-    the approach is generalizable to other source types, including radioactive sources due to their similar signal characteristics\cite{rolloutHoffmann2019}. Tian et al. developed 
-    a multi-step look-ahead policy for UAV surveillance that incorporates a layered decision framework to balance multiple objectives including safe navigation and target tracking. Their work 
+    algorithms construct an improved policy through a one-step lookahead, often yielding significantly better performance than the original heuristic while maintaining implementation 
+    simplicity \cite{bertsekas2013rollout}. Several researchers have explored rollout algorithms for source localization and path planning. Hoffmann et al. proposed
+    a rollout-based path planner that optimizes mobile sensor trajectories for RF source localization using lookahead policies and cost-based optimization. While their focus was on RF sources, 
+    the approach is generalizable to other source types, including radioactive sources, due to their similar signal characteristics\cite{rolloutHoffmann2019}. Tian et al. developed 
+    a multi-step lookahead policy for UAV surveillance that incorporates a layered decision framework to balance multiple objectives, including safe navigation and target tracking. Their work 
     demonstrates the effectiveness of rollout policies in anticipating future states and making informed decisions for path planning tasks \cite{rolloutMultiStepLookaheadTian2008}. 
-    These works demonstrate the potential of rollout algorithms for efficient path planning and source localization.   The success of Hoffmann's approach with RF sources and Tian's implementation
-    for UAV surveillance suggests that adapting rollout mechanisms for radiation source localization could be particularly effective. The method's ability to improve upon base heuristics while
+    These works demonstrate the potential of rollout algorithms for efficient path planning and source localization. The success of Hoffmann et al.'s approach with RF sources and Tian et al.'s implementation
+    for UAV surveillance suggests that adapting rollout mechanisms shows significant potential for radiation source localization. The method's ability to improve upon base heuristics while
     maintaining computational efficiency makes it especially suitable for radiation scenarios where quick localization is crucial. Furthermore, the one-step lookahead policy could help navigate 
     the complex radiation fields while accounting for particle attenuation and scattering effects.
     

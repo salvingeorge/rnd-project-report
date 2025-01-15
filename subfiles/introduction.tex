@@ -19,16 +19,16 @@
     %     \end{figure}
     %     Refer to figures as Fig. \ref{fig:figureexample}.
     %     \item You can add tables as follows (note that the table caption is above the table).
-    %     \begin{table}[ht]
-    %         \caption{My caption}
-    %         \label{tab:tableexample}
-    %         \begin{tabular}{M{0.45\linewidth} M{0.45\linewidth}}
-    %             \hline
-    %             \cellcolor{gray!10!white} Header 1 & \cellcolor{gray!10!white} Header 2 \\\hline
-    %             Cell 1 & Cell 2 \\\hline
-    %             Cell 3 & Cell 4 \\\hline
-    %         \end{tabular}
-    %     \end{table}
+        % \begin{table}[ht]
+        %     \caption{My caption}
+        %     \label{tab:tableexample}
+        %     \begin{tabular}{M{0.45\linewidth} M{0.45\linewidth}}
+        %         \hline
+        %         \cellcolor{gray!10!white} Header 1 & \cellcolor{gray!10!white} Header 2 \\\hline
+        %         Cell 1 & Cell 2 \\\hline
+        %         Cell 3 & Cell 4 \\\hline
+        %     \end{tabular}
+        % \end{table}
     %     Refer to tables as Tab. \ref{tab:tableexample}.
     %     \item You can add equations as follows.
     %     \begin{equation}
@@ -39,47 +39,44 @@
     % \end{itemize}
     It is claimed that life would not be possible without radioactivity, which is an essential component of life. Life on Earth began when naturally occurring radioactivity heated
     the Earth's core \cite{DOEExplainsRadioactivity}. The science of radioactivity has come a long way since Henri Becquerel discovered it in 1896, and it is now a prerequisite for
-    many modern technologies. Radioactive elements are used in scientific studies to determine the age of rocks and fossils. For example, in health, radioactive materials are
-    employed in imaging and treating disease. In energy, radioactive materials are utilized in nuclear power plants and also to power spacecraft.
+    many modern technologies. Radioactive elements are used in scientific studies to determine the age of rocks and fossils. For example, radioactive materials are
+    employed in health imaging and disease treatment. In energy, radioactive materials are utilized in nuclear power plants and spacecraft.
     % \vspace{0.5cm}
 
 
-    However, the inherent properties of radioactive materials that make them valuable also present significant challenges in their handling and security. These materials are
+    However, the inherent properties of radioactive materials that make them valuable also present significant challenges in handling and security. These materials are
     invisible to the naked eye and can be easily concealed, making their detection and tracking a complex technological challenge. The risks associated with radioactive materials
-    are compounded by their potential for malicious use, whether as weapons or as means of environmental contamination.
+    are compounded by their potential for malicious use, whether as weapons or as a means of environmental contamination.
     \subsection{Motivation}
     \label{sec:introduction:motivation}
 
     % Describe the context of your work and the motivation for it.
-    The development of reliable methods for localizing radioactive sources is crucial for several reasons. First, these techniques can significantly enhance security measures by 
-    helping law enforcement and security organizations identify potential threats more quickly. Second, in industrial settings such as nuclear power plants, rapid detection of 
-    radioactive leaks is essential for maintaining operational safety and protecting both workers and the surrounding environment.
-    The field of radioactive source localization faces several significant challenges that underscore the importance of this research. Testing with real radioactive sources is 
-    inherently difficult and potentially hazardous, necessitating the development of accurate simulation frameworks. Furthermore, the physical behavior of radiation, particularly
-    particle attenuation and scattering, presents complex modeling challenges that affect both the simulation accuracy and the effectiveness of localization methods. While 
-    previous approaches exist, many are computationally expensive and require exhaustive area searches, making them impractical for rapid source identification.
-    These challenges, combined with the increasing incidents of radioactive material mishandling, highlight the urgent need for more efficient and practical solutions. The 
-    development of improved localization methods could significantly enhance our ability to manage and secure radioactive materials, ultimately contributing to both public 
-    safety and environmental protection.
+    It is essential to develop trustworthy techniques for locating radioactive sources. First, these methods can significantly enhance security measures by helping law enforcement and security 
+    agencies spot possible threats faster. Second, quick detection of radioactive leakage is essential for preserving operational safety and safeguarding the environment and employees in industrial 
+    settings such as nuclear power plants. Localizing radioactive sources is intriguing yet challenging, highlighting the need for continued research. Strong simulation frameworks are required 
+    since testing with actual radioactive sources can be dangerous and complicated by nature. Furthermore, comprehending the complex physical behavior of radiation, particularly particle 
+    attenuation and scattering, presents intriguing modeling problems that affect simulations' accuracy and localization's efficacy. Although various methods have been put forth, they are less 
+    feasible for rapid source detection because they are computationally intensive and necessitate broad area searches.  It is very important to have a set of tools and methods that can effectively
+    localize the radiation source without human interference, as the need for this is very relevant in recent times. This way, we can ensure public safety and environmental protection. 
 
     \subsection{Problem Statement}
     \label{sec:introduction:problem_statement}
 
     % Describe the problem you are addressing in the work.
     The fundamental challenge in radioactive source localization lies in using sensor measurements and prior knowledge to estimate the position and intensity of unknown radiation 
-    sources within an environment. Current approaches face several key limitations: they often require exhaustive search of the entire space, struggle with sensor noise and measurement 
+    sources within an environment. Current approaches face several key limitations: they often require an exhaustive and complete search of the entire search area, struggle with sensor noise and measurement 
     uncertainty, perform poorly in environments with limited accessibility, and suffer from high computational complexity when dealing with dynamic and large search spaces.
-
+   
     The core research problem encompasses three main aspects. First, the development of a physics-accurate simulation framework that can reliably model radiation behavior, including particle 
-    attenuation and scattering effects. Second, the creation of a comprehensive evaluation framework capable of assessing and comparing different localization approaches. Third, the 
+    attenuation and scattering effects. Second, a comprehensive evaluation framework capable of assessing and comparing different localization approaches must be created. Third, the 
     implementation and analysis of various localization algorithms, examining their computational complexity, resource requirements, accuracy, and efficiency across different environmental conditions.
-    \subsection{Proposed Approach}
     \label{sec:introduction:proposed_approach}
 
     % Write a short summary of your proposed approach.
-    To address these challenges, we propose an integrated framework that combines simulation, evaluation, and algorithm implementation. The simulation component uses established radiation physics models 
-    to create realistic test scenarios, incorporating inverse square law, attenuation, and scattering effects. The evaluation framework provides quantitative metrics for assessing algorithm performance, 
-    including computational efficiency, accuracy, and robustness to noise. We implement and compare several localization methods, including rollout algorithms, entropy-based approaches, and optimization-based methods. Each method is systematically evaluated under various environmental conditions and constraints. Through this comprehensive approach, we aim to advance both the theoretical understanding and 
-    practical application of radioactive source localization.
+    We present a framework that integrates simulation, evaluation, and algorithm implementation to tackle these challenges. The simulation component uses established radiation physics models 
+    to create realistic test scenarios, incorporating inverse square law, attenuation, and scattering effects. The evaluation framework provides quantitative metrics for assessing algorithm 
+    performance, including computational efficiency, accuracy, and robustness to noise. We implement and compare several localization methods, including rollout algorithms, entropy-based 
+    approaches, and optimization-based methods. Each method is systematically evaluated under various environmental conditions and constraints. We aim to develop an integrated system that 
+    allows for robust and flexible implementation and testing of various radiation source localization algorithms.
 
 \end{document}
