@@ -4,13 +4,42 @@
 \begin{document}
     \section{Conclusions}
     \label{sec:conclusions}
-    The time includes the movement time as well, a drone with a better controller might be achieve better performance in the the time taken. 
+    Developing and evaluating our framework for radioactive source localization has provided valuable insights into the relative performance of different 
+    localization strategies. This method combines physics-based radiation simulation with systematic evaluation methods to compare three distinct approaches: information-gain-based
+    and inverse square law optimization algorithms. Our experiments and evaluation across multiple source configurations demonstrate that each method can localize sources with
+    varying efficiency and accuracy. The information-gain-based algorithm is a winner regarding convergence time and achieving the lowest
+    position error in source localization. The rollout algorithm also performs well but with a slightly higher convergence time and consistently predicts a position error of around 7 meters due to the selection of a grid resolution of 5 meters. While effective, the inverse square law optimization algorithm 
+    takes significantly longer to converge and, with some source configurations, position in this case, witnesses a higher error. It is also worth noting that the evaluation metrics are the convergence time and the position error. The convergence time also includes the movement time, and a 
+    drone with better movement control might achieve better performance in the time taken.
 
     \subsection{Summary}
     \label{sec:conclusions:summary}
 
+    Our comprehensive evaluation of three distinct approaches to radiation source localization - information-gain-based, rollout-based, and inverse square law 
+    optimization - revealed several significant findings. Statistical analysis demonstrated that while all three methods achieved comparable accuracy in source 
+    localization, with errors ranging from 4.5 to 14.4 meters, they exhibited marked differences in convergence speed. The information-gain-based approach 
+    consistently demonstrated superior performance, achieving convergence in 43-126 seconds, followed by the rollout algorithm at 90-177 seconds. Both methods 
+    significantly outperformed the baseline inverse square method, which required 415-470 seconds for convergence.
+
+    The Wilcoxon Signed-Rank Test demonstrated significant differences in convergence times among the algorithms, with large effect sizes (r = 0.8864) supporting 
+    this finding. This statistical evidence and practical performance metrics strongly validate the effectiveness of information-theoretic methods in radiation 
+    source localization.
+
     \subsection{Contributions}
     \label{sec:conclusions:contributions}
+
+    This research makes several contributions to the field of autonomous radiation source localization. First, we have developed a physics-based 
+    simulation framework that incorporates realistic radiation behavior, including particle attenuation and scattering effects. This framework provides a reliable
+    platform for testing and evaluating localization algorithms under controlled conditions.
+
+    Second, our implementation and comparative analysis of three distinct localization approaches establishes quantitative benchmarks for algorithm performance. 
+    The systematic evaluation methodology we developed, combining both practical performance metrics and rigorous statistical analysis, provides a framework 
+    for assessing future algorithms in this domain.
+
+    Third, our results demonstrated that, in the domain of radioactive source localization, the information-based methods could perform significantly better than
+    the traditional predefined trajectory following methods without compromising accuracy and time. This study offers a promising direction for developing 
+    autonomous methods that may need to find radioactive sources
+
 
     \subsection{Future Work}
     \label{sec:conclusions:future_work}

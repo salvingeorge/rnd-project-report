@@ -72,11 +72,23 @@
     implementation and analysis of various localization algorithms, examining their computational complexity, resource requirements, accuracy, and efficiency across different environmental conditions.
     \label{sec:introduction:proposed_approach}
 
+    Despite advances in radiation source localization, existing methods often rely on simplified models that inadequately capture real-world radiation physics and 
+    lack systematic ways to compare different approaches. Current solutions frequently compromise detection speed and computational efficiency, limiting their 
+    practical application.
+    
+    
+    Our research addresses these challenges through three key contributions: the development of a physics-accurate simulation framework incorporating realistic 
+    radiation behavior, the implementation of three complementary localization algorithms (information-gain-based, rollout-based, and inverse square optimization), 
+    and the establishment of a comprehensive evaluation methodology. Together, these contributions enable systematic comparison of localization strategies under 
+    realistic conditions, advancing the field toward more practical and efficient solutions.
+
     % Write a short summary of your proposed approach.
     We present a framework that integrates simulation, evaluation, and algorithm implementation to tackle these challenges. The simulation component uses established radiation physics models 
     to create realistic test scenarios, incorporating inverse square law, attenuation, and scattering effects. The evaluation framework provides quantitative metrics for assessing algorithm 
     performance, including computational efficiency, accuracy, and robustness to noise. We implement and compare several localization methods, including rollout algorithms, entropy-based 
     approaches, and optimization-based methods. Each method is systematically evaluated under various environmental conditions and constraints. We aim to develop an integrated system that 
     allows for robust and flexible implementation and testing of various radiation source localization algorithms.
+
+
 
 \end{document}

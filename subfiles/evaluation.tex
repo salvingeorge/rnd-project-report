@@ -14,13 +14,13 @@
     \label{sec:evaluation}
 
     % If your work involved experiments, describe the experimental setup and the results in this section.
-    The efficiency of the simulation framework and the implemented algorithms were evaluated using a set of experiments. The experiments were performed under a 
-    set of different radiation source position chosen randomly. The experiments were conducted in a 100x100 meter area and the drone is assumed to take off From
+    The efficiency of the simulation framework and the implemented algorithms were evaluated using a set of experiments. The experiments were performed randomly under a 
+    set of different radiation source positions. The experiments were conducted in a 100x100 meter area and the drone is assumed to take off From
     the origin of the area for each test. For each source position, each algorithm is tested 10 times. Each test is considered successful if the drone is able to 
     locate a source, and the main parameters of the test will be saved into a JSON file for further analysis.  The tests under the same source position are evaluated
-    together. The evaluation metrics considered for each run are, prediction error, time taken to detect the source, time taken to converge the source position, 
-    distance travelled by the drone to localize the source, number of iterations, and time taken for computation. The prediction error is calculated as the Euclidean
-    distance between the predicted source position and the actual source position. Along with the preformance metrics, the measurement histroy, trajectory, and computation times from each 
+    together. The evaluation metrics considered for each run are prediction error, time taken to detect the source, time taken to converge the source position, 
+    distance traveled by the drone to localize the source, number of iterations, and time taken for computation. The prediction error is calculated as the Euclidean
+    distance between the predicted source position and the actual source position. Along with the performance metrics, the measurement history, trajectory, and computation times from each 
     iteration are also saved for further analysis. The results of the experiments are presented in the following sections.
 
 
@@ -56,7 +56,7 @@
     \subsection{Analysis}
 
     As shown in the table~\ref{tab:algorithm_comparison}, the source location (30, 50) presents an interesting case for detailed analysis. This location was chosen for further 
-    investigation because it represents the best performance accross all algorithms. 
+    investigation because it represents the best performance across all algorithms. 
     
     
     
@@ -74,14 +74,12 @@
     prediction errors in some runs demonstrates its potential for high accuracy under favorable conditions.
 
     The median error of the entropy algorithm is approximately 7m, which aligns with findings from previous studies by Ristic et al. \cite{Ristic2007AnIG} and \cite{ristic2010information}. In 
-    contrast, the inverse square algorithm exhibits a distinctly narrow spread, with errors consistently falling between 6 to 7.5 meters. This concentrated distribution around 7 meters reflects 
+    contrast, the inverse square algorithm exhibits a distinctly narrow spread, with errors consistently falling between 6 and 7.5 meters. This concentrated distribution of around 7 meters reflects 
     the algorithm's consistency across runs, which can be attributed to its systematic measurement collection from fixed points within the search area relative to the source location.
 
     The rollout algorithm shows prediction errors ranging from 6 to 10 meters, with most errors clustering around 7 meters, similar to the other algorithms. The algorithm's minimum error of 7 
     meters occurs frequently, which can be attributed to the chosen grid size (5 m) naturally leading to localization errors in the range of 5 to 7 meters. This pattern suggests that the grid 
     resolution plays a significant role in determining the algorithm's precision limits.
-    
-    \vspace{0.3cm}
 
     \subsubsection{Convergence Time}
 
@@ -92,21 +90,12 @@
         \label{fig:convergence_violin_plot}
     \end{figure}
 
-    The plot for figure~\ref{fig:convergence_violin_plot} illustrates the distribution of convergence time accross different algorithms reveealing some interesting insights. The entropy-based 
-    method exhibits the fastest convergence times, with most runs successfuly localizing with in 45 seconds. The tight horizontal spread of the entropy algorithm's convergence times indicates
-    that the algorithm consistently converges with in a narrow time frame making it the fastest algorithm to find the source once the source's presense is detected. The inverse square method 
-    shows significantly longer convergence times, centered around 420-470 seconds.  This longer convergence time is likely due to its systematic approach of measuring at predefined points, requiring
-    more comprehensive coverage of the search area.
-
-    The rollout algorithm presents an intermediate performance profile, with convergence times typically between 90-180 seconds. Its distribution shows more variance than the entropy method but 
-    considerably less than the inverse square approach. The broader base of its distribution indicates more variability in convergence times, possibly due to the algorithm's adaptive decision-making
-    process that can take different paths depending on the measurements received.
+    
 
     \subsection{Statistical Analysis}
 
     Since radiation counts follow a Poisson Distribution \cite{ristic2010information}, non-parametric tests were selected for algorithm comparison. Specifically, the Wilcoxon Signed-Rank Test was 
     employed to provide detailed comparisons of paired samples, accounting for both the direction and magnitude of differences. All tests were conducted at a significance level of 0.05.
-    \vspace{0.3cm}
 
     \subsubsection{Prediction Error Analysis}
     The statistical analysis of prediction errors using the Wilcoxon Signed-Rank Test revealed no significant differences between the algorithms, with detailed results presented in Table~\ref{tab:wilcoxon_prediction_results}. These findings suggest that all three algorithms achieve comparable levels of accuracy in source localization.
@@ -147,12 +136,12 @@
 
     \paragraph{Detailed Analysis}
     The pairwise comparisons revealed several key insights:
-    \begin{itemize}
-        \item The comparison between Entropy and Inverse Square methods showed perfect balance (5 wins each) with a negligible effect size (r = 0.0483), strongly suggesting equivalent performance.
-        \item While Entropy showed a slight advantage over Rollout (6 vs 4 samples), the small effect size (r = 0.2095) and non-significant p-value (0.5566) indicate that this difference is not practically meaningful.
-        \item Similarly, Inverse Square's slight advantage over Rollout (6 vs 4 samples) yielded a small effect size (r = 0.2740) and non-significant p-value (0.4316), suggesting comparable performance levels.
-    \end{itemize}
-
+       \begin{itemize}
+           \item The comparison between Entropy and Inverse Square methods showed perfect balance (5 wins each) with a negligible effect size (r = 0.0483), strongly suggesting equivalent performance.
+           \item While Entropy showed a slight advantage over Rollout (6 vs 4 samples), the small effect size (r = 0.2095) and non-significant p-value (0.5566) indicate that this difference is not practically meaningful.
+           \item Similarly, Inverse Square's slight advantage over Rollout (6 vs 4 samples) yielded a small effect size (r = 0.2740) and non-significant p-value (0.4316), suggesting comparable performance levels.
+       \end{itemize}
+   
     \vspace{0.3cm}
 
     \paragraph{Interpretation of Results}
@@ -161,11 +150,11 @@
     \vspace{0.3cm}
     
     \subsubsection{Convergence Time Analysis}
-
+   
     The convergence time analysis utilizing the Wilcoxon Signed-Rank Test uncovered systematic performance differences among the algorithms.
-
+   
     \paragraph{Wilcoxon Signed-Rank Test Results}
-
+   
     Table~\ref{tab:wilcoxon_results} presents the results of the Wilcoxon Signed-Rank Test conducted to compare the `convergence\_time` metric across the three algorithms: entropy, 
     inverse\_square, and rollout. Each pairwise comparison assessed whether there were statistically significant differences in convergence times between the algorithms.
 
@@ -206,35 +195,38 @@
 
     The Wilcoxon Signed-Rank Test results indicate significant and substantial differences in convergence times among the three algorithms.
 
-    Entropy consistently achieved faster convergence times than the Inverse Square method across all 10 paired samples. This difference is statistically significant (p = 0.0020) with a large effect size (r = 0.8864), indicating that the observed performance improvement is both meaningful and practically significant.
+    Entropy consistently achieved faster convergence times than the Inverse Square method across all 10 paired samples. This difference is statistically significant (p = 0.0020) with a large 
+    effect size (r = 0.8864), indicating that the observed performance improvement is both meaningful and practically significant.
 
-    Similarly, Entropy outperformed Rollout in all 10 paired samples, demonstrating a statistically significant difference (p = 0.0020) and a large effect size (r = 0.8864). This suggests that Entropy not only performs better but does so consistently across all instances tested.
+    Similarly, Entropy outperformed Rollout in all 10 paired samples, demonstrating a statistically significant difference (p = 0.0020) and a large effect size (r = 0.8864). This suggests that 
+    Entropy not only performs better but does so consistently across all instances tested.
 
-    In contrast, Rollout consistently achieved faster convergence times than Inverse Square in all 10 paired samples. The results are statistically significant (p = 0.0020) with a large effect size (r = 0.8864), underscoring the superior performance of Rollout over Inverse Square.
+    In contrast, Rollout consistently achieved faster convergence times than Inverse Square in all 10 paired samples. The results are statistically significant (p = 0.0020) with a large effect 
+    size (r = 0.8864), underscoring the superior performance of Rollout over Inverse Square.
 
     \paragraph{Rank Summary}
 
     For each pairwise comparison, the rank summaries are as follows:
 
-    In the comparison between Entropy and Inverse Square, all 10 paired samples favored Entropy, resulting in 0 positive ranks (Inverse Square performed better) and 10 negative ranks (Entropy performed better), with no ties.
+    In the comparison between Entropy and Inverse Square, all 10 paired samples favored Entropy, resulting in 0 positive ranks (Inverse Square performed better) and 10 negative ranks (Entropy 
+    performed better), with no ties.
 
-    Similarly, in the Entropy versus Rollout comparison, all 10 paired samples favored Entropy, leading to 0 positive ranks (Rollout performed better) and 10 negative ranks (Entropy performed better), with no ties.
+    Similarly, in the Entropy versus Rollout comparison, all 10 paired samples favored Entropy, leading to 0 positive ranks (Rollout performed better) and 10 negative ranks (Entropy performed 
+    better), with no ties.
 
-    Lastly, in the Inverse Square versus Rollout comparison, all 10 paired samples favored Rollout, resulting in 10 positive ranks (Rollout performed better) and 0 negative ranks (Inverse Square performed better), with no ties.
+    Lastly, in the Inverse Square versus Rollout comparison, all 10 paired samples favored Rollout, resulting in 10 positive ranks (Rollout performed better) and 0 negative ranks (Inverse Square 
+    performed better), with no ties.
 
     \paragraph{Interpretation of Results}
 
-    The Wilcoxon Signed-Rank Test outcomes reveal clear and consistent performance hierarchies among the three algorithms. Entropy consistently outperforms both Inverse Square and Rollout, achieving faster convergence times across all paired samples. Additionally, Rollout outperforms Inverse Square in all paired samples. These findings suggest that the Entropy algorithm is the most efficient in terms of convergence time, followed by Rollout, with Inverse Square being the least efficient among the three.
+    The Wilcoxon Signed-Rank Test outcomes reveal clear and consistent performance hierarchies among the three algorithms. Entropy consistently outperforms both Inverse Square and Rollout, 
+    achieving faster convergence times across all paired samples. Additionally, Rollout outperforms Inverse Square in all paired samples. These findings suggest that the Entropy algorithm is the 
+    most efficient in terms of convergence time, followed by Rollout, with Inverse Square being the least efficient among the three.
 
-    \subsubsection{Summary and Recommendations}
+    The Wilcoxon Signed-Rank Test results indicate whether the observed differences between algorithms are likely real or due to chance, based on the comparison of p-values with the significance 
+    level ($\alpha$ = 0.05). The value 0.05 is commonly used for significance levels and it is the probability of rejecting the null hypothesis when it is actually true - in other words, the probability of making a Type I error (a false positive) \cite{loftus2021basic}. 
 
-    1. **Statistical Significance:**  
-    The Wilcoxon Signed-Rank Test results indicate whether the observed differences between algorithms are likely real or due to chance, based on the comparison of p-values with the significance level ($\alpha$ = 0.05).
-
-    2. **Practical Significance:**  
-    Effect sizes (r) provide insight into the magnitude of the differences. Large effect sizes, as observed in all comparisons, suggest that the differences are not only statistically significant but also practically meaningful for real-world applications.
-
-    3. **Decision Making:**  
-    Both statistical and practical significances should be considered when making decisions. Large effect sizes combined with statistical significance offer the strongest evidence for meaningful differences. These findings should be aligned with specific use cases and requirements to inform the selection of the most appropriate algorithm.
+    Effect sizes ($r$) provide insight into the magnitude of the differences. Large effect sizes($r > 0.5$), as observed in all comparisons, suggest that the differences are not only statistically significant 
+    but also practically meaningful for real-world applications.
 
 \end{document}
