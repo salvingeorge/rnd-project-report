@@ -10,12 +10,15 @@
     varying efficiency and accuracy. The information-gain-based algorithm is a winner regarding convergence time and achieving the lowest
     position error in source localization. The rollout algorithm also performs well but with a slightly higher convergence time and consistently predicts a position error of around 7 meters due to the selection of a grid resolution of 5 meters. While effective, the inverse square law optimization algorithm 
     takes significantly longer to converge and, with some source configurations, position in this case, witnesses a higher error. It is also worth noting that the evaluation metrics are the convergence time and the position error. The convergence time also includes the movement time, and a 
-    drone with better movement control might achieve better performance in the time taken.
+    drone with better movement control might achieve better performance in the time taken. The entropy algorithm managed to achieve the best accuracy of upto
+    just around 2 meters, but the rollout-based method has managed to achieve around 5 meters due to the grid resolution. The inverse square law optimization 
+    method fluctuates quite significantly due to the area coverage and source position. 
 
     \subsection{Summary}
     \label{sec:conclusions:summary}
 
-    Our comprehensive evaluation of three distinct approaches to radiation source localization - information-gain-based, rollout-based, and inverse square law 
+    Our comprehensive evaluation of three distinct approaches to radiation source localization based on source location $(30,50)$ in 
+    table~\ref{tab:algorithm_comparison}- information-gain-based, rollout-based, and inverse square law 
     optimization - revealed several significant findings. Statistical analysis demonstrated that while all three methods achieved comparable accuracy in source 
     localization, with errors ranging from 4.5 to 14.4 meters, they exhibited marked differences in convergence speed. The information-gain-based approach 
     consistently demonstrated superior performance, achieving convergence in 43-126 seconds, followed by the rollout algorithm at 90-177 seconds. Both methods 
@@ -43,4 +46,6 @@
 
     \subsection{Future Work}
     \label{sec:conclusions:future_work}
+
+    Right now, the source detection is done in rollout in a later stage, we could make that earlier. 
 \end{document}

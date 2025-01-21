@@ -48,7 +48,7 @@
 
     \subsubsection{Evaluation Visualizer}
 
-    Each algorithm, upon successful completion, is saved in a standardized JSON file format. All metrics contained in these files are consistent across all algorithms, which facilitates easier 
+    The results of each algorithm, upon successful completion, is saved in a standardized JSON file format. All metrics contained in these files are consistent across all algorithms, which facilitates easier 
     comparison and visualization of the results.
 
     The Evaluation Visualizer is an interface designed to visualize these results based on a set of configurations. When the interface is opened, the user can select the input directory containing 
@@ -73,6 +73,7 @@
     The drone begins at the central point and traverses the pattern in an anticlockwise direction. This pattern is particularly effective for radiation source detection for several reasons.
     The shamrock pattern ensures overlapping in some parts of the trajectory along the petals, ensuring no significant gaps in the search area. The radial nature of the pattern always 
     keeps the drone referenced to the center of the search area, thereby enabling efficient coverage.
+
     \subsubsection{Information-Gain-based Algorithm}
 
     The proposed method combines a particle filter for sequential Bayesian estimation with information-driven observer control using Rényi divergence. The particle filter approximates
@@ -84,15 +85,16 @@
     \paragraph{Particle Filter Framework}
     The source state $X = [x, y, I]^T$ comprises 2D position $(x,y)$ and intensity $I$ following the established approach from Ristic et al. who demonstrated that a 2D formulation for ground-based 
     radiation sources is both effective and computationally efficient. While radiation physically propagates in 3D space, the measurement model can be effectively simplified to 2D since the height
-    difference between source and detector remains constant and doesn't contribute additional information for horizontal localization. 
+    difference between source and detector remains constant and does not contribute additional information for horizontal localization. 
     The posterior distribution is approximated using weighted particles:
 
     \begin{equation}
     p(X|z_{1:k}) \approx \sum_{i=1}^N w_k^i \delta(X - X_k^i)
     \end{equation}
 
-    where $X$ is the state vector containing position and intensity, $z_{1:k}$ represents all measurements up to time $k$, $w_k^i$ is the normalized weight of particle $i$, $N$ is the total number 
-    of particles, $\delta(\cdot)$ is the Dirac delta function. 
+    where $X$ is the radiation source state vector containing position $(x,y)$ and intensity $I$, $z_{1:k}$ represents all measurements up to time $k$, $w_k^i$ is the normalized weight of 
+    particle $i$, $N$ is the total number of particles, $\delta(\cdot)$ is the Dirac delta function, $X_k^i$ is the state vector of the $i^{th}$ particle at time k containing
+    hypothesized source location $(x_k^i, y_k^i)$ and intensity $I_k^i$. 
 
     \paragraph{Particle Initialization}
     The particles are initialized uniformly across the search area with a total particle count of $N (5000)$. These are distributed as follows, Position components (x,y) are initialized on a 
@@ -113,6 +115,9 @@
     background radiation rate, $\tau_k$ is the measurement exposure time, $\beta$ is the atmospheric attenuation coefficient.
 
     \paragraph{Two-Phase Search Strategy}
+    The source is present in search area as a point source emitting gamma radiation. While the radioactive source is present throughout the experiment, the 
+    detection refers to the algorithm's statistical confidence that measurements indicate a radioactive source is distinguishable from background radiation. To
+    find this distinguishable confidence, the algorithm operates in two distinct phases: exploration and exploitation. 
     During the exploration phase, the detection probability is monitored using:
 
     \begin{equation}
@@ -135,8 +140,9 @@
     g_\alpha(x_k') = \frac{1}{N}\sum_{i=1}^N \exp(\alpha \hat{z}_k^i)
     \end{equation}
 
-    where, $D_\alpha(x_k')$ is the Rényi divergence for candidate position $x_k'$, $\alpha$ is the Rényi divergence parameter ($\alpha > 0$), $g_\alpha(x_k')$ is the $\alpha$-weighted prediction 
-    sum, $\hat{z}_k^i$ is the normalized predicted measurement, $E(x_k')$ is the exploration bonus term. The primary distinction between our approach and Ristic et al. \cite{ristic2010information}
+    where, $D_\alpha(x_k')$ is the Rényi divergence for candidate position $x_k'$, $\alpha$ is the Rényi divergence parameter ($\alpha > 0$), $\hat{z}_k^i$ is the predicted measurement at position $x_k$ for particle $i$. which was then normalized for numerical stability Then $g_\alpha(x_k')$ combines these normalized predictions 
+    into a weighted sum, where $\alpha$ controls how much weight is given to larger predictions, $E(x_k')$ is the exploration bonus term. The primary distinction between our approach and Ristic et al. 
+    \cite{ristic2010information}
     lies in the modification of the Rényi divergence calculation. While maintaining the same core information-theoretic framework, we introduce an exploration bonus term $E(x_k')$ that explicitly 
     rewards measurements in areas of low particle density. This modification helps balance the exploitation of high-information regions with the exploration of uncertain areas, potentially leading 
     to more robust source localization. The original formulation by Ristic et al. focused purely on information gain, which could sometimes lead to overly concentrated measurements around the 
@@ -175,7 +181,7 @@
         \centering
         \includegraphics[width=\linewidth]{figures/entropy_algorithm_with_label.png}
         \caption{Information gain-based radiation source localization for source location (30, 50): a. Initial particle distribution across search area, 
-        b. Particle resampling on source detection, 
+        b. Particle resampling when source is detected with high probability using equation~\ref{eq:prob_detection}, 
         c. Convergence of particles near true source location, and 
         d. Final source position estimation with completed path}
         \label{fig:entropy_algorithm_with_plot}
@@ -262,10 +268,11 @@
 
     where $ m_t $ is the simulated measurements at time t, $\gamma = 0.9$ is the discount factor, $b(i,j)$ is the belief at grid cell $(i,j)$, $s_t$ represents the state 
     (drone position and belief) at time $t$, and $a_t$ represents the action (movement) being evaluated, $d(s_t, x_{i,j})$ is the distance from state $s_t$ to grid cell $(i,j)$,
-    $d\_max$ is the distance to the maximum belief point, $T$ is the planning horizon and $M$ represents the set of grid cells within the search area boundaries.
+    $d\_max$ is the distance to the maximum belief point, $T$ is the planning horizon representing how many steps to look ahead and $M$ represents the set of grid cells within the search area boundaries.
     The discount factor $\gamma$ helps balance between immediate and future rewards, ensuring that the cumulative reward does not grow unbounded and thereby making the 
     comparison between trajectories more meaningful. Furthermore, the discount factor helps to retain the focus on early rewards in the trajectory than later, as it may contain crucial 
-    information that can guide the estimation. 
+    information that can guide the estimation. The denominator terms in the value function creates an inverse relationship where positions closer to high belief area gets 
+    higher values, and the 0.2 coefficient is used to make this proximity bonus more gradual than the belief bonus. 
 
     To evaluate these Q-values in practice, the rollout algorithm performs trajectory planning by generating multiple candidate trajectories from the drone's current position. At each decision 
     point,  the algorithm calculates a set of possible movement angles based on the current belief state and drone position, after which the algorithm simulates multiple potential paths with 
