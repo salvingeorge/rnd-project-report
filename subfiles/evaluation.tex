@@ -52,7 +52,25 @@
                 \hline
             \end{tabular}
             \caption*{Note: Error represents prediction error in meters, Time represents convergence time in seconds}
-        \end{table}
+    \end{table}
+
+    \begin{table}[!htbp]
+        \caption{Algorithm Performance Metrics}
+        \label{tab:algorithm_performance}
+        \begin{tabular}{|l |c |c |c |c |c|}
+        \hline
+        \cellcolor{gray!10!white} Metric & Entropy & Inverse Square & Rollout \\
+        \hline
+        Detection Time (s) & 10.6763 & N/A & 55.3380 \\
+        Total Duration (s) & 43.5593 & 432.6485 & 127.6378 \\
+        Total Iterations & 164.4000 & 4886.9000 & 2531.6000 \\
+        Total Distance & 85.5140 & 936.5585 & 215.9527 \\
+        Mean Computation Time (s) & 0.0001 & 0.0001 & 0.0000 \\
+        \hline
+        \end{tabular}
+        \caption*{Note: Other performance metrics for the run at source location (30,50) that are not includeed in Table~\ref{tab:algorithm_comparison}}
+     \end{table}
+
     \subsection{Analysis}
 
     As shown in the table~\ref{tab:algorithm_comparison}, the source location (30, 50) presents an interesting case for detailed analysis. This location was chosen for further 
@@ -64,7 +82,7 @@
     \begin{figure}[ht]
         \centering
         \includegraphics[width=\linewidth]{figures/prediction_violin_plot.png}
-        \caption{Violin plot of prediction error for source location (30, 50)}
+        \caption{Violin plot of prediction error in information-gain-based (entropy), inverse square optimization method and rollout algorithm for source location (30, 50)}
         \label{fig:prediction_violin_plot}
     \end{figure}
 
@@ -86,18 +104,18 @@
     \begin{figure}[ht]
         \centering
         \includegraphics[width=\linewidth]{figures/convergence_violin_plot.png}
-        \caption{Violin plot of convergence time for source location (30, 50)}
+        \caption{Violin plot of convergence time in information-gain-based (entropy), inverse square optimization method and rollout algorithm for source location (30, 50)}
         \label{fig:convergence_violin_plot}
     \end{figure}
 
     
 
-    \subsection{Statistical Analysis}
+    \paragraph{Statistical Analysis}
 
     Since radiation counts follow a Poisson Distribution \cite{ristic2010information}, non-parametric tests were selected for algorithm comparison. Specifically, the Wilcoxon Signed-Rank Test was 
     employed to provide detailed comparisons of paired samples, accounting for both the direction and magnitude of differences. All tests were conducted at a significance level of 0.05.
 
-    \subsubsection{Prediction Error Analysis}
+    \paragraph{Prediction Error Analysis}
     The statistical analysis of prediction errors using the Wilcoxon Signed-Rank Test revealed no significant differences between the algorithms, with detailed results presented in Table~\ref{tab:wilcoxon_prediction_results}. These findings suggest that all three algorithms achieve comparable levels of accuracy in source localization.
     \begin{table}[ht]
         \caption{Wilcoxon Signed-Rank Test Results for Prediction Error}
@@ -132,9 +150,6 @@
         \end{tabular}
     \end{table}
 
-
-
-    \paragraph{Detailed Analysis}
     The pairwise comparisons revealed several key insights:
        \begin{itemize}
            \item The comparison between Entropy and Inverse Square methods showed perfect balance (5 wins each) with a negligible effect size (r = 0.0483), strongly suggesting equivalent performance.
@@ -144,20 +159,18 @@
    
     \vspace{0.3cm}
 
-    \paragraph{Interpretation of Results}
     The consistency in non-significant results across all three comparisons, combined with small to negligible effect sizes, provides strong evidence that the algorithms achieve similar levels of prediction accuracy. This is particularly noteworthy given the balanced distribution of positive and negative ranks across comparisons, suggesting that any observed differences are likely due to random variation rather than systematic performance differences.
     
     \vspace{0.3cm}
     
     \subsubsection{Convergence Time Analysis}
    
-    The convergence time analysis utilizing the Wilcoxon Signed-Rank Test uncovered systematic performance differences among the algorithms.
-   
-    \paragraph{Wilcoxon Signed-Rank Test Results}
-   
-    Table~\ref{tab:wilcoxon_results} presents the results of the Wilcoxon Signed-Rank Test conducted to compare the `convergence\_time` metric across the three algorithms: entropy, 
-    inverse\_square, and rollout. Each pairwise comparison assessed whether there were statistically significant differences in convergence times between the algorithms.
+    The convergence time analysis utilizing the Wilcoxon Signed-Rank Test uncovered systematic performance differences among the algorithms. As demonstrated by the 
+    Figure~\ref{fig:convergence_violin_plot} there are clear substantial differences in the time taken for convergence. The information-gain-based (entropy)
+    algorithm consistently outperforms the inverse square optimization method and the rollout algorithm in terms of convergence time. 
 
+    To validate this visual observations, the Wilcoxon Signed-Rank Test was conducted, confirming the statistical significance of the algorithms evaluated in pairs as seen 
+    in Table~\ref{tab:wilcoxon_results}. These tests corroborate the clear performance hierarchy visible in the violin plot.
     \begin{table}[ht]
         \caption{Wilcoxon Signed-Rank Test Results for Convergence Time}
         \label{tab:wilcoxon_results}
@@ -191,42 +204,12 @@
         \end{tabular}
     \end{table}
 
-    \paragraph{Detailed Pairwise Analysis}
+    These performance differences establish a clear hierarchy among the algorithms, with the entropy-based approach demonstrating superior efficiency, followed by 
+    rollout, and then inverse square. The magnitude of these differences is substantial enough to have meaningful implications for practical applications, 
+    particularly in time-sensitive radioactive source localization tasks where rapid convergence is crucial.
 
-    The Wilcoxon Signed-Rank Test results indicate significant and substantial differences in convergence times among the three algorithms.
-
-    Entropy consistently achieved faster convergence times than the Inverse Square method across all 10 paired samples. This difference is statistically significant (p = 0.0020) with a large 
-    effect size (r = 0.8864), indicating that the observed performance improvement is both meaningful and practically significant.
-
-    Similarly, Entropy outperformed Rollout in all 10 paired samples, demonstrating a statistically significant difference (p = 0.0020) and a large effect size (r = 0.8864). This suggests that 
-    Entropy not only performs better but does so consistently across all instances tested.
-
-    In contrast, Rollout consistently achieved faster convergence times than Inverse Square in all 10 paired samples. The results are statistically significant (p = 0.0020) with a large effect 
-    size (r = 0.8864), underscoring the superior performance of Rollout over Inverse Square.
-
-    \paragraph{Rank Summary}
-
-    For each pairwise comparison, the rank summaries are as follows:
-
-    In the comparison between Entropy and Inverse Square, all 10 paired samples favored Entropy, resulting in 0 positive ranks (Inverse Square performed better) and 10 negative ranks (Entropy 
-    performed better), with no ties.
-
-    Similarly, in the Entropy versus Rollout comparison, all 10 paired samples favored Entropy, leading to 0 positive ranks (Rollout performed better) and 10 negative ranks (Entropy performed 
-    better), with no ties.
-
-    Lastly, in the Inverse Square versus Rollout comparison, all 10 paired samples favored Rollout, resulting in 10 positive ranks (Rollout performed better) and 0 negative ranks (Inverse Square 
-    performed better), with no ties.
-
-    \paragraph{Interpretation of Results}
-
-    The Wilcoxon Signed-Rank Test outcomes reveal clear and consistent performance hierarchies among the three algorithms. Entropy consistently outperforms both Inverse Square and Rollout, 
-    achieving faster convergence times across all paired samples. Additionally, Rollout outperforms Inverse Square in all paired samples. These findings suggest that the Entropy algorithm is the 
-    most efficient in terms of convergence time, followed by Rollout, with Inverse Square being the least efficient among the three.
-
-    The Wilcoxon Signed-Rank Test results indicate whether the observed differences between algorithms are likely real or due to chance, based on the comparison of p-values with the significance 
-    level ($\alpha$ = 0.05). The value 0.05 is commonly used for significance levels and it is the probability of rejecting the null hypothesis when it is actually true - in other words, the probability of making a Type I error (a false positive) \cite{loftus2021basic}. 
-
-    Effect sizes ($r$) provide insight into the magnitude of the differences. Large effect sizes($r > 0.5$), as observed in all comparisons, suggest that the differences are not only statistically significant 
-    but also practically meaningful for real-world applications.
+    The consistent pattern of performance across all test cases provides strong evidence for the practical advantages of using information-theoretic approaches 
+    (entropy-based) over traditional methods in radiation source localization tasks. This finding aligns with the theoretical expectations, as the entropy-based
+    method makes more informed decisions about measurement locations based on information gain principles.
 
 \end{document}

@@ -15,8 +15,14 @@
     lightweight and also easy to work with. A new radiation sensor plugin and radiation source plugin were developed to simulate the radiation source and the sensor. This plugin can be easily 
     integrated into the simulation and can be used to simulate the radiation source and the sensor. 
         
-    To accurately represent realistic radiation behavior, the radiation source is modeled as a point gamma radiation source that emits radiation uniformly in all directions. The radiation sensor 
-    receives and publishes data in the form of photon count rates; however, this count rate is subject to attenuation caused by trees and the air surrounding the sensor. 
+    To accurately represent realistic radiation behavior, the radiation source is modeled as a point gamma radiation source that emits radiation uniformly in all directions. 
+    The system transforms raw radiation activity (measured in Becquerel per square meter), which is derived by applying the inverse square law. This fundamental physical principle describes how 
+    radiation intensity decreases quadratically with distance from the source, allowing precise calculation of radiation density at varying distances. The system converts this distance-dependent 
+    surface activity into a photon count rate by multiplying the intensity with detector-specific parameters, including active area, gamma emissions per decay, detector efficiency, and fractional 
+    live time. A Poisson distribution is then applied to simulate the probabilistic nature of radiation detection, generating a statistically realistic representation of radiation measurement.
+
+
+    The radiation sensor receives and publishes data in the form of photon count rates; however, this count rate is subject to attenuation caused by trees and the air surrounding the sensor.
 
     The attenuation from trees is implemented through ray tracing, which helps to determine if the sensor has a clear line of sight to the radiation source. If trees obstruct the line of sight, 
     the radiation is attenuated based on the type of tree and a specific attenuation factor. The positions of the trees are generated dynamically according to the map size while ensuring a 
@@ -109,6 +115,7 @@
 
     \begin{equation}
     \lambda(X, x_k) = \left(\frac{I}{d^2(x_k, X)} + \mu_b\right)\tau_k \cdot \exp(-\beta d(x_k, X))
+    \label{eq:entropy_measurement_model}
     \end{equation}
 
     where, $\lambda(X, x_k)$ is the expected measurement rate at position $x_k$, $I$ is the source intensity, $d(x_k, X)$ is the distance from measurement position to source, $\mu_b$ is the 
@@ -173,9 +180,19 @@
     multiple tests. These criteria are: the particle spread must be less than 1.0m in both spatial dimensions, while the estimated source position must remain stable within 0.5m variation across 
     the last 10 estimates. These conservative termination conditions help reduce premature convergence or false positives while ensuring robust source localization.
 
-
     This framework enables efficient source detection and localization by combining systematic exploration with information-driven measurement optimization. The particle filter handles the 
     non-linear measurement model while maintaining uncertainty estimation throughout the process.
+
+    Figure~\ref{fig:rnd_entropy_algorithm_flow} illustrates the workflow of the information gain-based algorithm, highlighting the transition from shamrock pattern 
+    exploration to information-driven exploitaion using Rényi divergence.
+
+    \begin{figure}[ht]
+            \centering
+            \includegraphics[width=0.8\linewidth]{figures/entropy_flow.pdf}
+            \caption{Diagram showing the two-phase particle filter-based source localization process: exploration using shamrock pattern followed by 
+            information-driven exploitation using Rényi divergence}
+            \label{fig:rnd_entropy_algorithm_flow}
+    \end{figure}
 
     \begin{figure}[ht]
         \centering
@@ -194,7 +211,10 @@
 
 
     \subsubsection{Rollout-based Algorithm}
-
+    The algorithm operates in two primary phases: an initial systematic exploration using a shamrock search pattern, followed by an information-driven exploitation 
+    phase where the drone uses rollout-based path planning to efficiently converge on the radiation source's location. By simulating multiple potential paths and 
+    evaluating them through a sophisticated value function, the algorithm aims to optimize the trade-off between gathering immediate information and maintaining 
+    comprehensive search coverage.
     \paragraph{Belief update methodology}
     The core of this method is the belief update mechanism that transforms the radiation measurements into a probabilistic representation of the source's potential location. This belief update 
     method employs a three-dimensional grid-based representation of the search area, with each grid cell containing a probability value that represents the likelihood of the source being located.
@@ -205,30 +225,35 @@
     the measurement given a hypothesized source at position $x_j$ with intensity $I_k$ is modeled as:
 
     \begin{equation}
-        L(m_i | x_j, I_k) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(m_i - \hat{m}(x_j, I_k))^2}{2\sigma^2}\right)
+        L(m_i | \mathbf{x}_j, I_k) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(m_i - \hat{m}(\mathbf{x}_j, I_k))^2}{2\sigma^2}\right)
         \label{eq:rollout_likelihood}
     \end{equation}
 
-    Here, $\sigma$ represents the measurement uncertainty, which scales proportionally with the expected measurement intensity: $\sigma = 0.5 \cdot \hat{m}(x_j, I_k)$. This scaling captures the physical reality that measurement noise increases with radiation intensity.
+    Here, $\sigma$ represents the measurement uncertainty, which scales proportionally with the expected measurement intensity: $\sigma = 0.5 \cdot \hat{m}(\mathbf{x}_j, I_k)$. 
+    $\mathbf{x}_j$ represents a vector containing the hypothesized source position coordinates and denoted as $\mathbf{x}_j = (x_j, y_j)$. This scaling captures the physical reality that measurement 
+    noise increases with radiation intensity. The measurement model from entropy algorithm is different from what is used in the rollout algorithm. The measurement 
+    model in  equation~\ref{eq:entropy_measurement_model} as it is based on the works on the works of ristic et al. The measurement model in rollout algorithm 
+    is used as a simple measurement model to construct a probabilistic grid-based representation of the search area.
 
-    The expected measurement $\hat{m}(x_j, I_k)$ is computed using the inverse square law for radiation propagation, incorporating the drone's height $h$ for accurate distance calculations:
+    The expected measurement $\hat{m}(\mathbf{x}_j, I_k)$ is computed using the inverse square law for radiation propagation, incorporating the drone's height $h$ for accurate distance calculations:
 
     \begin{equation}
-        \hat{m}(x_j, I_k) = \frac{I_k}{(x - x_j)^2 + (y - y_j)^2 + h^2}
+        \hat{m}(\mathbf{x}_j, I_k) = \frac{I_k}{(x - x_j)^2 + (y - y_j)^2 + h^2}
     \end{equation}
 
     Where $(x,y)$ represents the drone's position, $(x_j,y_j)$ represents a potential source location, and $I_k$ is the hypothesized source intensity. This equation reflects how 
     radiation intensity decreases with the square of the distance from the source, just as light spreads out from a point source.
     
-    The system updates its belief state using Bayes' rule, which combines the likelihood of new measurements with prior beliefs:
+    The system updates its belief state using Bayes' rule, which combines the likelihood of new measurements with prior beliefs. Let $m_i$ represent the radiation intensity measurement (count rate) 
+    obtained at the drone's current position:
     \begin{equation}
-        P(x_j, I_k|M) = \frac{P(M|x_j, I_k)P(x_j, I_k)}{\sum_{j,k} P(M|x_j, I_k)P(x_j, I_k)}
+        P(\mathbf{x}_j, I_k|m_i) = \frac{P(m_i|\mathbf{x}_j, I_k)P(\mathbf{x}_j, I_k)}{\sum_{j,k} P(m_i|\mathbf{x}_j, I_k)P(\mathbf{x}_j, I_k)}
     \end{equation}
-    Where $P(x_j, I_k|M)$ is the posterior probability over position and intensity, $P(M|x_j,I_k)$ is the measurement likelihood, and $P(x_j,I_k)$ is the prior probability.
+    Where $P(\mathbf{x}_j, I_k|m_i)$ is the posterior probability over position and intensity, $P(m_i|\mathbf{x}_j,I_k)$ is the measurement likelihood, and $P(\mathbf{x}_j,I_k)$ is the prior probability.
 
     The belief confidence, which is crucial for detection and convergence checking, is calculated as the maximum posterior probability across all grid cells and intensities:
     \begin{equation}
-        \text{confidence} = \max_{j,k} P(x_j, I_k|M)
+        \text{confidence} = \max_{j,k} P(\mathbf{x}_j, I_k|m_i)
     \end{equation}
 
     The algorithm uses this confidence measure, along with several other important metrics, to make key decisions about source detection and convergence. During the exploration phase, source detection 
@@ -284,6 +309,15 @@
     The exploitation phase continues until strict convergence criteria are met: the belief confidence must exceed 0.95, the maximum likelihood estimate must remain stable across multiple 
     measurements, and the drone must confirm proximity to the estimated source location through direct measurements. This systematic evaluation of possible trajectories through Q-value 
     computation allows the system to make decisions that balance the immediate need for information with the strategic value of maintaining efficient coverage of the search area.
+
+    Figure~\ref{fig:rollout_algorithm_flow} illustrates the workflow of the rollout algorithm demonstrating how the belief map update mechanism integrates with 
+    the Q-value computation for rollout trajectory selection
+    \begin{figure}[ht]
+        \centering
+        \includegraphics[width=0.8\linewidth]{figures/rollout_flow.pdf}
+        \caption{Diagram illustrating the belief update and Q-value based decision process, transitioning from shamrock exploration to trajectory optimization}
+        \label{fig:rollout_algorithm_flow}
+    \end{figure}
     \begin{figure}[ht]
         \centering
         \includegraphics[width=\linewidth]{figures/rollout_algorithm.png}
@@ -330,7 +364,16 @@
     This approach is an effective baseline for comparison due to its deterministic nature, foundation in established physics principles, reproducible 
     behavior, and comprehensive evaluation metrics. The predefined path strategy and inverse square law optimization provide a methodical reference
     point against which more sophisticated, informed search strategies can be evaluated.
-    
+    \begin{figure}[ht]
+        \centering
+        \includegraphics[width=\linewidth]{figures/inv_sq_flow.pdf}
+        \caption{Diagram of the deterministic baseline approach using concentric search patterns and Nelder-Mead optimization}
+        \label{fig:inverse_square_method_flow}
+    \end{figure}
+
+    Figure~\ref{fig:inverse_square_method_flow} represent the workflow of the baseline approach, from initial measurement collection through Nelder-Mead optimization 
+    and confidence circle calculation.
+
     \begin{figure}[ht]
         \centering
         \includegraphics[width=\linewidth]{figures/inverse_square_method_with_label.png}
