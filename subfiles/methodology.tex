@@ -77,7 +77,7 @@
     localize the radiation source. In rollout-based and information gain-based methods, the drone follows a shamrock pattern until source detection, after which it switches to the 
     respective exploitation methods. The shamrock pattern serves as a systematic exploration strategy, featuring four distinct petals that emanate from the center of the search area. 
     The drone begins at the central point and traverses the pattern in an anticlockwise direction. This pattern is particularly effective for radiation source detection for several reasons.
-    The shamrock pattern ensures overlapping in some parts of the trajectory along the petals, ensuring no significant gaps in the search area. The radial nature of the pattern always 
+    The shamrock pattern ensures overlap in some parts of the trajectory along the petals, ensuring no significant gaps in the search area. The radial nature of the pattern always 
     keeps the drone referenced to the center of the search area, thereby enabling efficient coverage.
 
     \subsubsection{Information-Gain-based Algorithm}
@@ -228,7 +228,7 @@
         L(m_i | \mathbf{x}_j, I_k) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(m_i - \hat{m}(\mathbf{x}_j, I_k))^2}{2\sigma^2}\right)
         \label{eq:rollout_likelihood}
     \end{equation}
-
+    
     Here, $\sigma$ represents the measurement uncertainty, which scales proportionally with the expected measurement intensity: $\sigma = 0.5 \cdot \hat{m}(\mathbf{x}_j, I_k)$. 
     $\mathbf{x}_j$ represents a vector containing the hypothesized source position coordinates and denoted as $\mathbf{x}_j = (x_j, y_j)$. This scaling captures the physical reality that measurement 
     noise increases with radiation intensity. The measurement model from entropy algorithm is different from what is used in the rollout algorithm. The measurement 
