@@ -7,13 +7,13 @@
     Developing and evaluating our framework for radioactive source localization has provided valuable insights into the relative performance of different 
     localization strategies. This method combines physics-based radiation simulation with systematic evaluation methods to compare three distinct approaches: information-gain-based
     and inverse square law optimization algorithms. Our experiments and evaluation across multiple source configurations demonstrate that each method can localize sources with
-    varying efficiency and accuracy. The information-gain-based algorithm is a winner regarding convergence time and achieving the lowest
-    position error in source localization. The algorithm while managed to achieve the lowerst position error, also experienced a few number of highest position error as visible in Figure~\ref{fig:prediction_violin_plot}. 
+    varying efficiency and accuracy. The information-gain-based algorithm is a winner in terms of convergence time and achieving the lowest
+    position errors in source localization. The algorithm while managing to achieve the lowest position error also experienced a few number of highest position errors as visible in Figure~\ref{fig:prediction_violin_plot}. 
     The rollout algorithm also performs well but with a slightly higher convergence time and consistently predicts a position error of around 7 meters due to the selection of a grid resolution of 5 meters. While effective, the inverse square law optimization algorithm 
     takes significantly longer to converge and, with some source configurations, position in this case, witnesses a higher error. It is also worth noting that the evaluation metrics are the convergence time and the position error. The convergence time also includes the movement time, and a 
-    drone with better movement control might achieve better performance in the time taken. The entropy algorithm managed to achieve the best accuracy of upto
+    drone with better movement control might achieve better performance in the time taken. The entropy algorithm managed to achieve the best accuracy of up to
     just around 2 meters, but the rollout-based method has managed to achieve around 5 meters due to the grid resolution. The inverse square law optimization 
-    method fluctuates quite significantly due to the area coverage and source position. The higher and lowest position errors in information-gain-based method represents the tradeoff between 
+    method fluctuates quite significantly due to the area coverage and source position. The higher and lowest position errors in the information-gain-based method represent the tradeoff between 
     the time taken to converge and the accuracy achieved. 
 
     \subsection{Summary}
@@ -37,13 +37,13 @@
     simulation framework that incorporates realistic radiation behavior, including particle attenuation and scattering effects. This framework provides a reliable
     platform for testing and evaluating localization algorithms under controlled conditions.
 
-    Second, our implementation and comparative analysis of three distinct localization approaches establishes quantitative benchmarks for algorithm performance. 
+    Second, our implementation and comparative analysis of three distinct localization approaches establish quantitative benchmarks for algorithm performance. 
     The systematic evaluation methodology we developed, combining both practical performance metrics and rigorous statistical analysis, provides a framework 
     for assessing future algorithms in this domain.
 
     Third, our results demonstrated that, in the domain of radioactive source localization, the information-based methods could perform significantly better than
     the traditional predefined trajectory following methods without compromising accuracy and time. This study offers a promising direction for developing 
-    autonomous methods that may need to find radioactive sources
+    autonomous methods that may need to find radioactive sources.
 
     Fourth, we have developed a comprehensive evaluation framework with an intuitive graphical interface that enables systematic analysis of localization algorithms.
     This framework features built-in statistical analysis capabilities, customizable visualization tools, and an extensible architecture that facilitates easy 
@@ -56,9 +56,9 @@
 
     Several promising directions exist for extending and improving this research. First, the framework could be extended to handle multiple sources, which would be 
     more challenging but more realistic. This would require extending the current methods to handle the overlapping of radiation fields. Secondly, the detection time 
-    and total time for rollout algorithm could be brought down by detecting the source at an earlier stage with lower confidence. This needs further investigation as
-    this might lead to longer convergence times. This increase increase in convergence time could be mitigated by using a lengthier rollout step size. As it would be more 
+    and total time for the rollout algorithm could be brought down by detecting the source at an earlier stage with lower confidence. This needs further investigation as
+    this might lead to longer convergence times. This increase in convergence time could be mitigated by using a lengthier rollout step size. As it would be 
     ideal as the drone would not be gaining much information in smaller steps, and the large step size could help to achieve higher information gain. Thirdly,
-    another key area for future research is implementing capabilites for tracking moving radiation sources, which wuld necessitate real-time belief updates, 
+    another key area for future research is implementing capabilities for tracking moving radiation sources, which would necessitate real-time belief updates, 
     adaptive path planning, predictive source movement modeling, and enhanced convergence strategies for mobile targets.
 \end{document}

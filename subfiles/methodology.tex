@@ -10,22 +10,41 @@
 
     % Feel free to rename this section to better reflect the concrete topic you are discussing.
     \subsection{Simulation Framework}
-    A set of simulation frameworks was investigated to select the best simulation that is available for the project. Gazebo was selected as the simulation based on its compatibility with ROS2 
+    Given the project's requirement for ROS2 integration, various simulation frameworks compatible with ROS2 were investigated for this project.. Gazebo was selected as the simulation based on its compatibility with ROS2 
     and the availability of the plugins that are already made available due to the familiarity of the platform. The SJTU drone system was selected as the drone model for the simulation as it was 
     lightweight and also easy to work with. A new radiation sensor plugin and radiation source plugin were developed to simulate the radiation source and the sensor. This plugin can be easily 
     integrated into the simulation and can be used to simulate the radiation source and the sensor. 
         
     To accurately represent realistic radiation behavior, the radiation source is modeled as a point gamma radiation source that emits radiation uniformly in all directions. 
-    The system transforms raw radiation activity (measured in Becquerel per square meter), which is derived by applying the inverse square law. This fundamental physical principle describes how 
-    radiation intensity decreases quadratically with distance from the source, allowing precise calculation of radiation density at varying distances. The system converts this distance-dependent 
-    surface activity into a photon count rate by multiplying the intensity with detector-specific parameters, including active area, gamma emissions per decay, detector efficiency, and fractional 
-    live time. A Poisson distribution is then applied to simulate the probabilistic nature of radiation detection, generating a statistically realistic representation of radiation measurement.
+    The system transforms raw radiation activity per unit area (measured in Becquerel per square meter), which is derived by applying the inverse square law:
+    
+    \begin{equation}
+        R(d) = \frac{A}{d^2 + \epsilon}
+    \end{equation}
 
+    where $R(d)$ is the radiation intensity at distance d, $A$ is the source intensity, and $\epsilon$ is a small constant to prevent division by zero.
 
-    The radiation sensor receives and publishes data in the form of photon count rates; however, this count rate is subject to attenuation caused by trees and the air surrounding the sensor.
+    This fundamental physical principle describes how radiation intensity decreases quadratically with distance from the source, allowing precise calculation of 
+    radiation density at varying distances. This radiation intensity is then converted into a count rate:
+    \begin{equation}
+        C = R \cdot A \cdot \Gamma \cdot \eta \cdot f 
+    \end{equation}
 
-    The attenuation from trees is implemented through ray tracing, which helps to determine if the sensor has a clear line of sight to the radiation source. If trees obstruct the line of sight, 
-    the radiation is attenuated based on the type of tree and a specific attenuation factor. The positions of the trees are generated dynamically according to the map size while ensuring a 
+    Where $C$ is count rate, $R$ is the radiation intensity, $A$ is the detectors active area, $\Gamma$ is the gamma emissons per decay, $\eta$ is the detector efficiency, and 
+    $f$ is the fractional live time of the detector. To simulate the probabilistic nature of the radiation detection process, the final count rate is modelled using
+    a poisson distribution:
+
+    N = Poisson(C)
+
+    where $N$ is the number of counts detected by the sensor. This count rate is subject to attenuation caused by trees and the air surrounding the sensor.
+
+    The attenuation from trees is implemented through ray tracing, which helps to determine if the sensor has a clear line of sight to the radiation source.  If 
+    trees obstruct the line of sight, the radiation is attenuated based on the type of tree and specific attenuation coefficients derived from literature. 
+    Based on the experimental studies from Kumar et al. \cite{kumar2021measurement} who experimented with different tree types and their attenuation coefficients using $662 keV$ sources
+    different wood species exhibit varying attenuation properties. In the simulation, two common species were used: Pine with a mass attenuation coefficient of 
+    0.0793 $cm^{2}/g$ and Oak with 0.0748 $cm^{2}/g$.The respective linear attenuation coefficients for Pine and Oak are 0.0555 $cm^{-1}$ and 0.0516 $cm^{-1}$ and 
+    the respective linear attenuation coefficient for air is 0.0001 $cm^{-1}$.
+    The positions of the trees are generated dynamically according to the map size while ensuring a 
     maintained specific distance between each tree.
         
     % \subsection{Measurement Model}

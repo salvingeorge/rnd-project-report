@@ -44,9 +44,13 @@
     % \vspace{0.5cm}
 
 
-    However, the inherent properties of radioactive materials that make them valuable also present significant challenges in handling and security. These materials are
-    invisible to the naked eye and can be easily concealed, making their detection and tracking a complex technological challenge. The risks associated with radioactive materials
-    are compounded by their potential for malicious use, whether as weapons or as a means of environmental contamination.
+    However, the inherent properties of radioactive materials that make them valuable also present significant challenges in handling and security. These radioactivity 
+    of these materials are invisible to the naked eye and they can be easily concealed, making their detection and tracking a complex technological challenge. 
+    Moreover, exposure to these materials can cause severe radiation sickness, burns, and potentially lethal effects before any symptoms become apparent. The risks 
+    associated with radioactive materials are compounded by their potential for malicious use, whether as weapons or as a means of environmental contamination that 
+    could render entire areas uninhabitable for decades. Even small radiation sources pose significant threats - as evidenced by numerous incidents where lost or 
+    stolen radioactive materials have led to serious injuries and fatalities.    
+    
     \subsection{Motivation}
     \label{sec:introduction:motivation}
 
@@ -54,20 +58,22 @@
     It is essential to develop trustworthy techniques for locating radioactive sources. First, these methods can significantly enhance security measures by helping law enforcement and security 
     agencies spot possible threats faster. Second, quick detection of radioactive leakage is essential for preserving operational safety and safeguarding the environment and employees in industrial 
     settings such as nuclear power plants. Localizing radioactive sources is intriguing yet challenging, highlighting the need for continued research. Strong simulation frameworks are required 
-    since testing with actual radioactive sources can be dangerous and complicated by nature. Furthermore, comprehending the complex physical behavior of radiation, particularly particle 
+    since testing with actual radioactive sources can be dangerous and complicated by nature. Nevertheless, testing under real conditions remains crucial, as the behavior often differs significantly
+    from the simulation results. Furthermore, comprehending the complex physical behavior of radiation, particularly particle 
     attenuation and scattering, presents intriguing modeling problems that affect simulations' accuracy and localization's efficacy. Although various methods have been put forth, they are less 
     feasible for rapid source detection because they are computationally intensive and necessitate broad area searches.  It is very important to have a set of tools and methods that can effectively
-    localize the radiation source without human interference, as the need for this is very relevant in recent times. This way, we can ensure public safety and environmental protection. 
+    localize the radiation source without human interference using unmanned vehicles. This way, we can ensure public safety and environmental protection.
 
     \subsection{Problem Statement}
     \label{sec:introduction:problem_statement}
 
     % Describe the problem you are addressing in the work.
     The fundamental challenge in radioactive source localization lies in using sensor measurements and prior knowledge to estimate the position and intensity of unknown radiation 
-    sources within an environment. Current approaches face several key limitations: they often require an exhaustive and complete search of the entire search area, struggle with sensor noise and measurement 
-    uncertainty, perform poorly in environments with limited accessibility, and suffer from high computational complexity when dealing with dynamic and large search spaces.
+    sources within an environment. Many current approaches \cite{marques2024radioactive}\cite{papadimitropoulos2015radioactive}\cite{vilim2009radtrac}\cite{howse2001least} \cite{rao2008identification} 
+    face several limitations: they often require an exhaustive and complete search of the entire search area, struggle with sensor noise and measurement 
+    uncertainty, perform poorly in complex environments, and suffer from high computational complexity when dealing with dynamic and large search spaces.
    
-    The core research problem encompasses three main aspects. First, the development of a physics-accurate simulation framework that can reliably model radiation behavior, including particle 
+    The core research problem in this work encompasses three main aspects. First, the development of a physics-accurate simulation framework that can reliably model radiation behavior, including particle 
     attenuation and scattering effects. Second, a comprehensive evaluation framework capable of assessing and comparing different localization approaches must be created. Third, the 
     implementation and analysis of various localization algorithms, examining their computational complexity, resource requirements, accuracy, and efficiency across different environmental conditions.
     \label{sec:introduction:proposed_approach}
